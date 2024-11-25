@@ -4,6 +4,7 @@
 import logging
 import os
 from email import message_from_string
+from unittest.mock import patch
 
 import odoo.tools as tools
 from odoo.exceptions import ValidationError
@@ -71,10 +72,6 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             }
         )
 
-    def _skip_test(self, reason):
-        _logger.warning(reason)
-        self.skipTest(reason)
-
     def _send_mail(
         self,
         message,
@@ -125,7 +122,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
         proper handling in the split.
         """
         user = "Test < User"
-        self.message.replace_header("From", "%s <test@example.com>" % user)
+        self.message.replace_header("From", f"{user} <test@example.com>")
         bounce_parameter = self.parameter_model.search(
             [("key", "=", "mail.bounce.alias")]
         )
@@ -145,7 +142,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_01_from_outgoing_server_domainone(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "domainone.com"
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
         expected_mail_server = self.mail_server_domainone
 
         self.message.replace_header("From", email_from)
@@ -168,7 +165,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_02_from_outgoing_server_domaintwo(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "domaintwo.com"
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
         expected_mail_server = self.mail_server_domaintwo
 
         self.message.replace_header("From", email_from)
@@ -191,7 +188,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_03_from_outgoing_server_another(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "example.com"
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
         expected_mail_server = self.mail_server_domainone
 
         self.message.replace_header("From", email_from)
@@ -199,7 +196,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
         with self.mock_smtplib_connection():
             message = self._send_mail(self.message)
         self.assertEqual(
-            message["From"], "Mitchell Admin <%s>" % expected_mail_server.smtp_from
+            message["From"], f"Mitchell Admin <{expected_mail_server.smtp_from}>"
         )
 
         used_mail_server = self.IrMailServer._get_mail_sever(domain)
@@ -213,34 +210,35 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             ),
         )
 
+    @patch.dict(tools.config.options, {"smtp_from": "admin@example.com"})
+    @patch.dict(tools.config.options, {"smtp_domain_whitelist": "example.com"})
     def test_04_from_outgoing_server_none_use_config(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "example.com"
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
 
         self._delete_mail_servers()
         self.assertFalse(self.IrMailServer.search([]))
         # Find config values
         config_smtp_from = tools.config.get("smtp_from")
         config_smtp_domain_whitelist = tools.config.get("smtp_domain_whitelist")
-        if not config_smtp_from or not config_smtp_domain_whitelist:
-            self._skip_test(
-                "Cannot test transactions because there is not either smtp_from"
-                " or smtp_domain_whitelist."
-            )
+        self.assertTrue(config_smtp_from)
+        self.assertTrue(config_smtp_domain_whitelist)
 
         self.message.replace_header("From", email_from)
         # A mail server is configured for the email
         with self.mock_smtplib_connection():
             message = self._send_mail(self.message)
-        self.assertEqual(message["From"], "Mitchell Admin <%s>" % config_smtp_from)
+        self.assertEqual(message["From"], f"Mitchell Admin <{config_smtp_from}>")
 
         used_mail_server = self.IrMailServer._get_mail_sever("example.com")
         used_mail_server = self.IrMailServer.browse(used_mail_server)
         self.assertFalse(
-            used_mail_server, "using this mail server %s" % (used_mail_server.name)
+            used_mail_server, f"using this mail server {used_mail_server.name}"
         )
 
+    @patch.dict(tools.config.options, {"smtp_from": "admin@example.com"})
+    @patch.dict(tools.config.options, {"smtp_domain_whitelist": "example.com"})
     def test_05_from_outgoing_server_none_same_domain(self):
         self._init_mail_server_domain_whilelist_based()
 
@@ -249,13 +247,10 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
         config_smtp_domain_whitelist = domain = tools.config.get(
             "smtp_domain_whitelist"
         )
-        if not config_smtp_from or not config_smtp_domain_whitelist:
-            self._skip_test(
-                "Cannot test transactions because there is not either smtp_from"
-                " or smtp_domain_whitelist."
-            )
+        self.assertTrue(config_smtp_from)
+        self.assertTrue(config_smtp_domain_whitelist)
 
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
 
         self._delete_mail_servers()
         self.assertFalse(self.IrMailServer.search([]))
@@ -272,7 +267,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_06_from_outgoing_server_no_name_from(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "example.com"
-        email_from = "test@%s" % domain
+        email_from = f"test@{domain}"
         expected_mail_server = self.mail_server_domainone
 
         self.message.replace_header("From", email_from)
@@ -295,7 +290,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_07_from_outgoing_server_multidomain_1(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "domainthree.com"
-        email_from = "Mitchell Admin <admin@%s>" % domain
+        email_from = f"Mitchell Admin <admin@{domain}>"
         expected_mail_server = self.mail_server_domainthree
 
         self.message.replace_header("From", email_from)
@@ -318,7 +313,7 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
     def test_08_from_outgoing_server_multidomain_3(self):
         self._init_mail_server_domain_whilelist_based()
         domain = "domainmulti.com"
-        email_from = "test@%s" % domain
+        email_from = f"test@{domain}"
         expected_mail_server = self.mail_server_domainthree
 
         self.message.replace_header("From", email_from)
