@@ -19,7 +19,6 @@ msgstr ""
 #. module: mail_outbound_static
 #. odoo-python
 #: code:addons/mail_outbound_static/models/ir_mail_server.py:0
-#, python-format
 msgid ""
 "%s is not a valid domain. Please define a list of valid domains separated by "
 "comma"
@@ -58,7 +57,6 @@ msgstr "Servidor de correo"
 #. module: mail_outbound_static
 #. odoo-python
 #: code:addons/mail_outbound_static/models/ir_mail_server.py:0
-#, python-format
 msgid "Not a valid Email From"
 msgstr "No es un Email De válido"
 
