@@ -11,8 +11,21 @@ class TestAttachExistingAttachment(BaseCommon):
     def setUpClass(cls):
         super().setUpClass()
         cls.partner_obj = cls.env["res.partner"]
-        cls.partner_01 = cls.env.ref("base.res_partner_10")
-        cls.partner_02 = cls.env.ref("base.res_partner_address_17")
+        cls.partner_01 = cls.partner_obj.create(
+            {
+                "name": "The Jackson Group",
+                "is_company": True,
+                "email": "jackson.group82@example.com",
+            }
+        )
+        cls.partner_02 = cls.partner_obj.create(
+            {
+                "name": "Toni Rhodes",
+                "function": "Managing Partner",
+                "parent_id": cls.partner_01.id,
+                "email": "toni.rhodes11@example.com",
+            }
+        )
 
     def test_send_email_attachment(self):
         ctx = self.env.context.copy()
