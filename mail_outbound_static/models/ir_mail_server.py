@@ -4,7 +4,7 @@
 import re
 from email.utils import parseaddr
 
-from odoo import _, api, fields, models, tools
+from odoo import api, fields, models, tools
 from odoo.exceptions import ValidationError
 from odoo.tools import formataddr
 
@@ -29,15 +29,16 @@ class IrMailServer(models.Model):
     @api.constrains("domain_whitelist")
     def check_valid_domain_whitelist(self):
         if self.domain_whitelist:
-            domains = list(self.domain_whitelist.split(","))
+            # Use list comprehension to strip whitespace for cleaner data.
+            domains = [domain.strip() for domain in self.domain_whitelist.split(",")]
             for domain in domains:
                 if not self._is_valid_domain(domain):
                     raise ValidationError(
-                        _(
-                            "%s is not a valid domain. Please define a list of"
-                            " valid domains separated by comma"
+                        self.env._(
+                            "%(domain)s is not a valid domain. Please define a list of"
+                            " valid domains separated by comma",
+                            domain=domain,
                         )
-                        % (domain)
                     )
 
     @api.constrains("smtp_from")
@@ -49,7 +50,7 @@ class IrMailServer(models.Model):
                 self.smtp_from,
             )
             if match is None:
-                raise ValidationError(_("Not a valid Email From"))
+                raise ValidationError(self.env._("Not a valid Email From"))
 
     def _is_valid_domain(self, domain_name):
         domain_regex = (
@@ -67,18 +68,33 @@ class IrMailServer(models.Model):
         res = [item.strip() for item in res]
         return res
 
-    def _prepare_email_message(self, message, smtp_session):
-        smtp_from, smtp_to_list, message = super()._prepare_email_message(
+    def _prepare_email_message__(self, message, smtp_session):
+        smtp_from, smtp_to_list, message = super()._prepare_email_message__(
             message, smtp_session
         )
-        name_from = self._context.get("name_from")
-        email_from = self._context.get("email_from")
-        email_domain = self._context.get("email_domain")
-        mail_server = self.browse(self._context.get("mail_server_id"))
+        context = self.env.context
+        name_from = context.get("name_from")
+        email_from = context.get("email_from")
+        email_domain = context.get("email_domain")
+        mail_server = self.browse(context.get("mail_server_id"))
         domain_whitelist = mail_server.domain_whitelist or tools.config.get(
             "smtp_domain_whitelist"
         )
         domain_whitelist = self._get_domain_whitelist(domain_whitelist)
+        header_name, header_email = parseaddr(message["From"])
+
+        # Restore the Display Name if Odoo core stripped it.
+        # Odoo's core logic often reduces "Name <email>" to just "email" during
+        # normalization. If the email matches but the name is gone, put it back.
+        if (
+            name_from
+            and email_from
+            and header_email == email_from
+            and header_name != name_from
+        ):
+            restored_from = formataddr((name_from, email_from))
+            message.replace_header("From", restored_from)
+
         # Replace the From only if needed
         if mail_server.smtp_from and (
             not domain_whitelist or email_domain not in domain_whitelist

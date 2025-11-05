@@ -3,6 +3,7 @@
 
 import logging
 import os
+import re
 from email import message_from_string
 from unittest.mock import patch
 
@@ -72,40 +73,15 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
             }
         )
 
-    def _send_mail(
-        self,
-        message,
-        mail_server_id=None,
-        smtp_server=None,
-        smtp_port=None,
-        smtp_user=None,
-        smtp_password=None,
-        smtp_encryption=None,
-        smtp_ssl_certificate=None,
-        smtp_ssl_private_key=None,
-        smtp_debug=False,
-        smtp_session=None,
-    ):
-        smtp = smtp_session
-        if not smtp:
-            smtp = self.IrMailServer.connect(
-                smtp_server,
-                smtp_port,
-                smtp_user,
-                smtp_password,
-                smtp_encryption,
-                smtp_from=message["From"],
-                ssl_certificate=smtp_ssl_certificate,
-                ssl_private_key=smtp_ssl_private_key,
-                smtp_debug=smtp_debug,
-                mail_server_id=mail_server_id,
-            )
-
-        send_from, send_to, message_string = self.IrMailServer._prepare_email_message(
-            message, smtp
-        )
-        self.IrMailServer.send_email(message)
-        return message_string
+    def _send_mail(self, message, mail_server_id=None):
+        """
+        This helper calls the real send_email method.
+        It's intended to be used inside a `mock_smtplib_connection`
+        context, which will prevent any real emails from being sent.
+        The message object is modified in-place and returned for inspection.
+        """
+        self.IrMailServer.send_email(message, mail_server_id=mail_server_id)
+        return message
 
     def test_send_email_injects_from_no_canonical(self):
         """It should inject the FROM header correctly when no canonical name."""
@@ -397,3 +373,63 @@ class TestIrMailServer(TransactionCase, MockSmtplibCase):
                 f" but we expect to use {expected_mail_server.name}"
             ),
         )
+
+    def test_12_domain_whitelist_whitespace_handling(self):
+        """Test whitespace around commas in domain_whitelist."""
+        self._init_mail_server_domain_whilelist_based()
+        mail_server = self.mail_server_domainone
+
+        # This should pass validation due to the .strip() in the list comprehension
+        mail_server.domain_whitelist = "  domainone.com ,  other.com  "
+
+        # Verify it was stored
+        self.assertTrue(mail_server.domain_whitelist)
+
+        # Test that the error message formatting uses %s correctly
+        # We pass an invalid domain with spaces to trigger the error
+        invalid_input = "invalid space"
+        # The error message in the code uses % (domain)
+        expected_error = (
+            f"{invalid_input} is not a valid domain. Please define a list of"
+            " valid domains separated by comma"
+        )
+
+        with self.assertRaisesRegex(ValidationError, re.escape(expected_error)):
+            mail_server.domain_whitelist = invalid_input
+
+    def test_13_restore_display_name_after_super_strip(self):
+        """Test that the display name is restored if super() strips it."""
+        self._init_mail_server_domain_whilelist_based()
+        domain = "domainone.com"
+        name = "Mitchell Admin"
+        email = f"admin@{domain}"
+        # Use tools.formataddr to ensure we match
+        # the quoting behavior of the implementation
+        full_from = tools.formataddr((name, email))
+
+        # Ensure we are using the whitelisted server
+        mail_server = self.mail_server_domainone
+        self.assertEqual(mail_server.domain_whitelist, domain)
+
+        self.message.replace_header("From", full_from)
+
+        # Define a side effect to simulate Odoo core stripping the name
+        # This ensures the modification happens *during* the call, not before
+        def side_effect(message, smtp_session):
+            # Simulate Odoo core returning just the email address (name stripped)
+            # We modify the message object in place as Odoo does
+            message.replace_header("From", email)
+            return email, ["to@example.com"], message
+
+        # Patch the method on the class so the super() call inside the module hits this
+        with patch(
+            "odoo.addons.base.models.ir_mail_server.IrMail_Server._prepare_email_message__",
+            side_effect=side_effect,
+        ):
+            with self.mock_smtplib_connection():
+                # send_email will capture the full context first, then call super(),
+                # which hits our side_effect, which strips the name.
+                # Then the module logic should restore it.
+                result_message = self._send_mail(self.message)
+
+        self.assertEqual(result_message["From"], full_from)
