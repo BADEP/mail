@@ -76,6 +76,9 @@ Contributors
 - Maxime Chambreuil <mchambreuil@opensourceintegrators.com>
 - Italo LOPES <contact@ilopes.me>
 - Saran Lim. <saranl@ecosoft.co.th>
+- `Heliconia Solutions Pvt. Ltd. <https://www.heliconia.io>`__
+
+  - Bhavesh Heliconia
 
 Maintainers
 -----------
