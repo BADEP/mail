@@ -3,7 +3,7 @@
 {
     "name": "Mail Restrict Send Button",
     "summary": "Security for Send Message Button on Chatter Area",
-    "version": "18.0.1.0.0",
+    "version": "19.0.1.0.0",
     "category": "Social Network",
     "author": "Open Source Integrators, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/mail",
