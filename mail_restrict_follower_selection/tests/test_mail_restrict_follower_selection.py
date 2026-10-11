@@ -13,7 +13,7 @@ class TestMailRestrictFollowerSelection(TransactionCase):
         self.category_employees = self.env["res.partner.category"].create(
             {"name": "Employees"}
         )
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "mail_restrict_follower_selection.domain.res.partner",
             "[('category_id.name', '=', 'Employees')]",
         )
@@ -30,7 +30,7 @@ class TestMailRestrictFollowerSelection(TransactionCase):
     def _use_ref_in_domain(self):
         """Change the general domain to test the safe_eval."""
         country_id = self.env.ref("base.ch").id
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "mail_restrict_follower_selection.domain",
             f"[('country_id', '!=', {country_id})]",
         )
