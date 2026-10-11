@@ -173,11 +173,13 @@ class TestMailActivityTeam(TransactionCase):
         self.assertEqual(
             self.act2.team_id, self.team1, "Error: Activity 2 should have Team 1."
         )
-        with self.assertRaises(
-            AssertionError, msg="can't write on invisible field user_id"
+        with (
+            self.assertRaises(
+                AssertionError, msg="can't write on invisible field user_id"
+            ),
+            Form(self.act2) as form,
         ):
-            with Form(self.act2) as form:
-                form.user_id = self.employee2
+            form.user_id = self.employee2
 
     def test_activity_onchanges_user_no_team(self):
         self.assertEqual(
@@ -255,11 +257,13 @@ class TestMailActivityTeam(TransactionCase):
             self.team1,
             "Error: Activity 2 should have Team 1.",
         )
-        with self.assertRaises(
-            AssertionError, msg="can't write on invisible field user_id"
+        with (
+            self.assertRaises(
+                AssertionError, msg="can't write on invisible field user_id"
+            ),
+            Form(self.schedule_act2) as form,
         ):
-            with Form(self.schedule_act2) as form:
-                form.activity_user_id = self.employee2
+            form.activity_user_id = self.employee2
 
     def test_schedule_activity_onchanges_user_no_team(self):
         self.assertEqual(
@@ -385,7 +389,7 @@ class TestMailActivityTeam(TransactionCase):
         res = (
             self.env["res.users"]
             .with_user(self.employee.id)
-            .with_context(**{"team_activities": True})
+            .with_context(team_activities=True)
             ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 0)
@@ -399,7 +403,7 @@ class TestMailActivityTeam(TransactionCase):
         res = (
             self.env["res.users"]
             .with_user(self.employee.id)
-            .with_context(**{"team_activities": True})
+            .with_context(team_activities=True)
             ._get_activity_groups()
         )
         self.assertEqual(res[0]["total_count"], 1)
@@ -948,12 +952,14 @@ class TestMailActivityTeam(TransactionCase):
         self.assertEqual(template.activity_team_id, self.team1)
 
         # Can't just remove the team without changing the assignment type
-        with self.assertRaisesRegex(
-            ValidationError,
-            "Please enter an activity team",
+        with (
+            self.assertRaisesRegex(
+                ValidationError,
+                "Please enter an activity team",
+            ),
+            self.env.cr.savepoint(),
         ):
-            with self.env.cr.savepoint():
-                template.activity_team_id = False
+            template.activity_team_id = False
 
         # Team is reset if type is not team
         template.write(

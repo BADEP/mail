@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="mail_activity_view_form_popup" model="ir.ui.view">
         <field name="name">mail.activity.view.form.popup</field>

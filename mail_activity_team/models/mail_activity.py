@@ -31,8 +31,9 @@ class MailActivity(models.Model):
             # Prefer teams with a matching model
             teams = (
                 teams.filtered(
-                    lambda mat, model_id=model_id: model_id
-                    in mat.sudo().res_model_ids.ids
+                    lambda mat, model_id=model_id: (
+                        model_id in mat.sudo().res_model_ids.ids
+                    )
                 )
                 or teams
             )
@@ -120,13 +121,15 @@ class MailActivity(models.Model):
         if not self.env.context.get("mail_activity_quick_update", False):
             new_team_id = values.get("team_id", False)
             team_notify_activities = self.filtered(
-                lambda activity, new_team_id=new_team_id: new_team_id
-                and activity.team_id.id != new_team_id
+                lambda activity, new_team_id=new_team_id: (
+                    new_team_id and activity.team_id.id != new_team_id
+                )
             )
             new_user_id = values.get("user_id", False)
             user_changed_activities = self.filtered(
-                lambda activity, new_user_id=new_user_id: new_user_id
-                and activity.user_id.id != new_user_id
+                lambda activity, new_user_id=new_user_id: (
+                    new_user_id and activity.user_id.id != new_user_id
+                )
             )
             team_notify_activities |= user_changed_activities
 
@@ -212,11 +215,14 @@ class MailActivity(models.Model):
             record = activity.env[activity.res_model].browse(activity.res_id)
             # Notify each team member except the assigned user and the current user
             members = activity.team_id.member_ids.filtered(
-                lambda member, assigned_user_id=activity.user_id: self.env.uid
-                not in member.user_ids.ids
-                and (
-                    not assigned_user_id
-                    or (assigned_user_id and assigned_user_id not in member.user_ids)
+                lambda member, assigned_user_id=activity.user_id: (
+                    self.env.uid not in member.user_ids.ids
+                    and (
+                        not assigned_user_id
+                        or (
+                            assigned_user_id and assigned_user_id not in member.user_ids
+                        )
+                    )
                 )
             )
             for member in members:
@@ -233,8 +239,9 @@ class MailActivity(models.Model):
                     {
                         "activity": activity_ctx,
                         "model_description": model_description,
-                        "is_html_empty": lambda value: not value
-                        or value == "<p><br></p>",
+                        "is_html_empty": lambda value: (
+                            not value or value == "<p><br></p>"
+                        ),
                     },
                     minimal_qcontext=True,
                 )

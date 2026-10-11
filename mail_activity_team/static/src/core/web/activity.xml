@@ -12,8 +12,8 @@
             position="before"
         >
             <span
-                class="o-mail-Activity-user px-1"
                 t-if="props.activity.team_id?.name"
+                class="o-mail-Activity-user px-1"
             >(Team <t t-esc="props.activity.team_id.name" />)
             </span>
         </xpath>
