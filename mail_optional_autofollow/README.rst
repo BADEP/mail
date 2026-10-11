@@ -21,13 +21,13 @@ Mail optional autofollow
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github
-    :target: https://github.com/OCA/mail/tree/19.0/mail_optional_autofollow
+    :target: https://github.com/OCA/mail/tree/20.0/mail_optional_autofollow
     :alt: OCA/mail
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_optional_autofollow
+    :target: https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_optional_autofollow
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=19.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/mail&target_branch=20.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -49,9 +49,8 @@ on mail.compose.message:
 Technically, this field is initialized to true if there is a
 'mail_post_autofollow' key in the current context
 
-|autofollow.png|
-
-.. |autofollow.png| image:: https://raw.githubusercontent.com/OCA/mail/19.0/mail_optional_autofollow/static/description/autofollow.png
+.. image:: https://raw.githubusercontent.com/OCA/mail/20.0/mail_optional_autofollow/static/description/autofollow.png
+   :alt: autofollow.png
 
 Bug Tracker
 ===========
@@ -59,7 +58,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/mail/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_optional_autofollow%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/mail/issues/new?body=module:%20mail_optional_autofollow%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -74,18 +73,18 @@ Authors
 Contributors
 ------------
 
-- Adrien Peiffer adrien.peiffer@acsone.eu
-- Stéphane Bidoul stephane.bidoul@acsone.eu
-- `Heliconia Solutions Pvt. Ltd. <https://www.heliconia.io>`__
+-  Adrien Peiffer adrien.peiffer@acsone.eu
+-  Stéphane Bidoul stephane.bidoul@acsone.eu
+-  `Heliconia Solutions Pvt. Ltd. <https://www.heliconia.io>`__
 
-  - Bhavesh Heliconia
+   -  Bhavesh Heliconia
 
 Other credits
 -------------
 
 The development of this module has been financially supported by:
 
-- ACSONE SA/NV
+-  ACSONE SA/NV
 
 Maintainers
 -----------
@@ -100,6 +99,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/19.0/mail_optional_autofollow>`_ project on GitHub.
+This module is part of the `OCA/mail <https://github.com/OCA/mail/tree/20.0/mail_optional_autofollow>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.
