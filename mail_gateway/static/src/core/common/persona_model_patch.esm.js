@@ -3,8 +3,8 @@ import {fields} from "@mail/core/common/record";
 import {patch} from "@web/core/utils/patch";
 
 patch(ResPartner.prototype, {
-    setup() {
-        super.setup();
-        this.gateway_channels = fields.Many("GatewayChannel");
-    },
+  setup() {
+    super.setup();
+    this.gateway_channels = fields.Many("GatewayChannel");
+  },
 });
