@@ -23,7 +23,7 @@ class MailTrackingController(main.MailTrackingController):
         """Avoid mailgun webhook attacks.
 
         See https://documentation.mailgun.com/en/latest/user_manual.html#securing-webhooks
-        """  # noqa: E501
+        """
         # Request cannot be old
         processing_time = datetime.now(timezone.utc) - datetime.fromtimestamp(
             int(timestamp), timezone.utc
