@@ -10,8 +10,8 @@
                     >
                         <img
                             class="o-mail-Message-avatar w-100 h-100 rounded"
-                            t-att-src="authorAvatarUrl"
                             t-att-class="authorAvatarAttClass"
+                            t-att-src="authorAvatarUrl"
                             t-on-click.stop.prevent="onClickAvatar"
                         />
                         <div
@@ -79,8 +79,8 @@
                             />
                         </div>
                         <div
-                            class="position-relative text-break o-mail-Message-body p-1"
                             t-if="state.showDetails"
+                            class="position-relative text-break o-mail-Message-body p-1"
                         >
                             <em
                                 t-if="message.subject and !message.isSubjectSimilarToOriginThreadName and !message.isSubjectDefault"

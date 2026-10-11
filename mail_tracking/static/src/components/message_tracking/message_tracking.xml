@@ -27,8 +27,8 @@
             />
             <t t-else="" t-set="title_status" t-value="tracking['status_human']" />
             <span
-                class="mail_tracking ps-1 text-black-50"
                 t-if="!skip_track_links"
+                class="mail_tracking ps-1 text-black-50"
                 t-att-data-tracking="tracking['tracking_id']"
                 t-att-title="title_status"
                 type="button"

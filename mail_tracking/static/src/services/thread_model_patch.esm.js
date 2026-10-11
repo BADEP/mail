@@ -3,10 +3,10 @@ import {Thread} from "@mail/core/common/thread_model";
 import {patch} from "@web/core/utils/patch";
 
 patch(Thread.prototype, {
-    getFetchRoute() {
-        if (this.model === "mail.box" && this.id === "failed") {
-            return `/mail/failed/messages`;
-        }
-        return super.getFetchRoute(...arguments);
-    },
+  getFetchRoute() {
+    if (this.model === "mail.box" && this.id === "failed") {
+      return `/mail/failed/messages`;
+    }
+    return super.getFetchRoute(...arguments);
+  },
 });
