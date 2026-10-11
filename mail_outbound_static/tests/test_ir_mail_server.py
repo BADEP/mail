@@ -7,7 +7,7 @@ import re
 from email import message_from_string
 from unittest.mock import patch
 
-import odoo.tools as tools
+from odoo import tools
 from odoo.exceptions import ValidationError
 from odoo.tests.common import TransactionCase
 
