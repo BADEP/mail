@@ -30,7 +30,7 @@ class MailThread(models.AbstractModel):
         limit_value = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_message_search.message_limit")
+            .get_str("mail_message_search.message_limit")
         )
         limit = int(limit_value) if limit_value else None
         messages = self.env["mail.message"]._search(domain, limit=limit)
