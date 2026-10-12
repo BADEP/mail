@@ -68,7 +68,7 @@ class ResConfigSettings(models.TransientModel):
         """Is Mailgun enabled?"""
         result = super().get_values()
         result["mail_tracking_mailgun_enabled"] = bool(
-            self.env["ir.config_parameter"].get_param("mailgun.apikey")
+            self.env["ir.config_parameter"].get_str("mailgun.apikey")
         )
         return result
 
@@ -81,7 +81,7 @@ class ResConfigSettings(models.TransientModel):
             auth=("api", params.api_key),
             timeout=self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT),
         )
         webhooks.raise_for_status()
         for event, data in webhooks.json()["webhooks"].items():
@@ -101,7 +101,7 @@ class ResConfigSettings(models.TransientModel):
                 auth=("api", params.api_key),
                 timeout=self.env["ir.config_parameter"]
                 .sudo()
-                .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
+                .get_str("mailgun.timeout", MAILGUN_TIMEOUT),
             )
             response.raise_for_status()
 
@@ -120,7 +120,7 @@ class ResConfigSettings(models.TransientModel):
                 data={"id": event, "url": [odoo_webhook]},
                 timeout=self.env["ir.config_parameter"]
                 .sudo()
-                .get_param("mailgun.timeout", MAILGUN_TIMEOUT),
+                .get_str("mailgun.timeout", MAILGUN_TIMEOUT),
             )
             # Assert correct registration
             response.raise_for_status()

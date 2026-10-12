@@ -147,7 +147,7 @@ class TestMailgun(BaseCommon):
         return event
 
     def test_no_api_key(self):
-        self.env["ir.config_parameter"].set_param("mailgun.apikey", "")
+        self.env["ir.config_parameter"].set_str("mailgun.apikey", "")
         with self.assertRaises(ValidationError):
             self.env["mail.tracking.email"]._mailgun_values()
 
@@ -161,7 +161,7 @@ class TestMailgun(BaseCommon):
             self.env["mail.tracking.email"]._mailgun_values()
         # Now we set an specific domain for Mailgun:
         # i.e: we configure new EU zone without loosing old domain statistics
-        self.env["ir.config_parameter"].set_param("mailgun.domain", "eu.example.com")
+        self.env["ir.config_parameter"].set_str("mailgun.domain", "eu.example.com")
         self.test_event_delivered()
 
     @mute_logger("odoo.addons.mail_tracking_mailgun.models.mail_tracking_email")
@@ -437,7 +437,7 @@ class TestMailgun(BaseCommon):
         mock_request.get.return_value.status_code = 404
         with self.assertRaises(UserError):
             self.partner.check_email_validity()
-        self.env["ir.config_parameter"].set_param("mailgun.validation_key", "")
+        self.env["ir.config_parameter"].set_str("mailgun.validation_key", "")
         with self.assertRaises(UserError):
             self.partner.check_email_validity()
 

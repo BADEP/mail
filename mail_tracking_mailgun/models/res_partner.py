@@ -57,7 +57,7 @@ class ResPartner(models.Model):
         timeout = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT)
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT)
         )
         if not params.validation_key:
             raise UserError(
@@ -141,7 +141,7 @@ class ResPartner(models.Model):
         timeout = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT)
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT)
         )
         for partner in self:
             res = requests.get(
@@ -166,7 +166,7 @@ class ResPartner(models.Model):
         timeout = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT)
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT)
         )
         for partner in self:
             res = requests.post(
@@ -189,7 +189,7 @@ class ResPartner(models.Model):
         timeout = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT)
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT)
         )
         for partner in self:
             res = requests.delete(

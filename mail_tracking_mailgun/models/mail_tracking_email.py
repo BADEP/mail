@@ -74,18 +74,18 @@ class MailTrackingEmail(models.Model):
     @api.model
     def _mailgun_values(self):
         icp = self.env["ir.config_parameter"].sudo()
-        api_key = icp.get_param("mailgun.apikey")
+        api_key = icp.get_str("mailgun.apikey")
         if not api_key:
             raise ValidationError(self.env._("There is no Mailgun API key!"))
-        api_url = icp.get_param("mailgun.api_url", "https://api.mailgun.net/v3")
+        api_url = icp.get_str("mailgun.api_url", "https://api.mailgun.net/v3")
         catchall_domain = self.env["mail.alias.domain"].sudo().search([], limit=1).name
-        domain = icp.get_param("mailgun.domain", catchall_domain or "")
+        domain = icp.get_str("mailgun.domain", catchall_domain or "")
         if not domain:
             raise ValidationError(self.env._("A Mailgun domain value is needed!"))
-        validation_key = icp.get_param("mailgun.validation_key")
-        web_base_url = icp.get_param("web.base.url")
-        webhooks_domain = icp.get_param("mailgun.webhooks_domain", web_base_url)
-        webhook_signing_key = icp.get_param("mailgun.webhook_signing_key")
+        validation_key = icp.get_str("mailgun.validation_key")
+        web_base_url = icp.get_str("web.base.url")
+        webhooks_domain = icp.get_str("mailgun.webhooks_domain", web_base_url)
+        webhook_signing_key = icp.get_str("mailgun.webhook_signing_key")
         return MailgunParameters(
             api_key,
             api_url,
@@ -218,7 +218,7 @@ class MailTrackingEmail(models.Model):
         timeout = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mailgun.timeout", MAILGUN_TIMEOUT)
+            .get_str("mailgun.timeout", MAILGUN_TIMEOUT)
         )
         api_key, api_url, domain, *__ = self._mailgun_values()
         for tracking in self.filtered("message_id"):
