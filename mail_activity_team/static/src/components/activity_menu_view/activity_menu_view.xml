@@ -7,7 +7,7 @@
     >
         <xpath expr="//div[1]" position="before">
             <div
-                t-ref="mail_activity_team_dropdown"
+                t-custom-ref="mail_activity_team_dropdown"
                 class="o_mail_systray_dropdown_top"
             >
                 <ul class="nav nav-pills">

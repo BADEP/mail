@@ -1,7 +1,7 @@
 import {ActivityMenu} from "@mail/core/web/activity_menu";
 import {patch} from "@web/core/utils/patch";
-import {useRef} from "@odoo/owl";
 import {user} from "@web/core/user";
+import { useRef } from "@web/owl2/utils";
 
 patch(ActivityMenu.prototype, {
   setup() {

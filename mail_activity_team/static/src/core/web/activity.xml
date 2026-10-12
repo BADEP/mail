@@ -14,15 +14,15 @@
             <span
                 t-if="props.activity.team_id?.name"
                 class="o-mail-Activity-user px-1"
-            >(Team <t t-esc="props.activity.team_id.name" />)
+            >(Team <t t-out="props.activity.team_id.name" />)
             </span>
         </xpath>
         <!-- Show team in the expanded view -->
-        <xpath expr="//t[@t-esc='props.activity.user_id.name']/../.." position="after">
+        <xpath expr="//t[@t-out='props.activity.user_id.name']/../.." position="after">
             <tr t-if="props.activity.team_id?.name">
                 <td class="text-end fw-bolder">Team</td>
                 <td>
-                    <t t-esc="props.activity.team_id.name" />
+                    <t t-out="props.activity.team_id.name" />
                 </td>
             </tr>
         </xpath>
