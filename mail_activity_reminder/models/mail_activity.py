@@ -124,7 +124,7 @@ class MailActivity(models.Model):
 
             body = self.env["ir.qweb"]._render(
                 "mail_activity_reminder.message_activity_assigned",
-                dict(activities=activities, model_description="Activities"),
+                {"activities": activities, "model_description": "Activities"},
                 minimal_qcontext=True,
             )
             MailThread.message_notify(
