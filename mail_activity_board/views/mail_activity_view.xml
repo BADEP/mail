@@ -70,10 +70,6 @@
                     string="Deadline"
                     name="date_deadline"
                     date="date_deadline"
-                    start_year="0"
-                    start_month="-1"
-                    end_year="2"
-                    end_month="2"
                 />
             </xpath>
         </field>

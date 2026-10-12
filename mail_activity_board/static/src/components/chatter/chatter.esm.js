@@ -1,6 +1,7 @@
 import {Chatter} from "@mail/chatter/web_portal/chatter";
+import { usePlugin } from "@odoo/owl";
 import {patch} from "@web/core/utils/patch";
-import {useService} from "@web/core/utils/hooks";
+import { ActionManagerPlugin } from "@web/webclient/actions/action_plugin";
 
 patch(Chatter.prototype, {
   // --------------------------------------------------------------------------
@@ -8,7 +9,7 @@ patch(Chatter.prototype, {
   // --------------------------------------------------------------------------
   setup() {
     super.setup(...arguments);
-    this.action = useService("action");
+    this.action = usePlugin(ActionManagerPlugin);
   },
   /**
    * @private
