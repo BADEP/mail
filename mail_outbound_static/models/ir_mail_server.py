@@ -60,13 +60,12 @@ class IrMailServer(models.Model):
         domain_regex = f"{domain_regex}$"
         valid_domain_name_regex = re.compile(domain_regex, re.IGNORECASE)
         domain_name = domain_name.lower().strip()
-        return True if re.match(valid_domain_name_regex, domain_name) else False
+        return bool(re.match(valid_domain_name_regex, domain_name))
 
     @api.model
     def _get_domain_whitelist(self, domain_whitelist_string):
         res = domain_whitelist_string.split(",") if domain_whitelist_string else []
-        res = [item.strip() for item in res]
-        return res
+        return [item.strip() for item in res]
 
     def _prepare_email_message__(self, message, smtp_session):
         smtp_from, smtp_to_list, message = super()._prepare_email_message__(
@@ -153,13 +152,13 @@ class IrMailServer(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return super().create(vals_list)
 
     def write(self, values):
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return super().write(values)
 
     def unlink(self):
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return super().unlink()

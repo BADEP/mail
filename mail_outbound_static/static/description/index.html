@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
-<title>README.rst</title>
+<meta name="generator" content="Docutilsb1.dev: https://docutils.sourceforge.io/" />
+<title>Mail Outbound Static</title>
 <style type="text/css">
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Id: $Id$
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
@@ -374,16 +374,16 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:76b4d7be37a31a3406e133157ceefd153719eb2cb1587119917b4f0707c4785d
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/19.0/mail_outbound_static"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-19-0/mail-19-0-mail_outbound_static"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=19.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/mail/tree/20.0/mail_outbound_static"><img alt="OCA/mail" src="https://img.shields.io/badge/github-OCA%2Fmail-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/mail-20-0/mail-20-0-mail_outbound_static"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/mail&amp;target_branch=20.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
 <p>This module brings Odoo outbound emails in to strict compliance with
 RFC-2822 by allowing for a dynamically configured From header, with the
 sender’s e-mail being appended into the proper Sender header instead. To
 accomplish this we:</p>
 <ul class="simple">
 <li>Add a domain whitelist field in the mail server model. This one
-represent an allowed Domains list separated by commas. If there is not
-given SMTP server it will let us to search the proper mail server to
-be used to send the messages where the message ‘From’ email domain
+represent an allowed Domains list separated by commas. If there is
+not given SMTP server it will let us to search the proper mail server
+to be used to send the messages where the message ‘From’ email domain
 match with the domain whitelist. If there is not mail server that
 matches then will use the default mail server to send the message.</li>
 <li>Add a Email From field that will let us to email from a specific
@@ -393,8 +393,8 @@ original message’s ‘From’ will remain as it is and will not be
 changed because the mail server is able to send in the name of the
 sender domain.</li>
 <li>If the original message’s ‘From’ does not match with the domain
-whitelist then the email From is replaced with the Email From field
-value.</li>
+whitelist then the email From is replaced with the Email From
+field value.</li>
 </ol>
 </li>
 <li>Add compatibility to define the smtp information in Odoo config file.
@@ -431,7 +431,7 @@ is not mail server configured in the system.</li>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/mail/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_outbound_static%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<a class="reference external" href="https://github.com/OCA/mail/issues/new?body=module:%20mail_outbound_static%0Aversion:%2020.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
@@ -468,7 +468,7 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.</p>
-<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/19.0/mail_outbound_static">OCA/mail</a> project on GitHub.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/mail/tree/20.0/mail_outbound_static">OCA/mail</a> project on GitHub.</p>
 <p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
 </div>
 </div>
