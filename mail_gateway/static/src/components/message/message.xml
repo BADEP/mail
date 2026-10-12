@@ -13,7 +13,7 @@
             >
                 <t t-if="message.gateway_thread_data.model !== 'discuss.channel'">
                     on <a t-att-href="message.resUrl">
-                    <t t-esc="message.gateway_thread_data?.name" />
+                    <t t-out="message.gateway_thread_data?.name" />
                 </a>
                 </t>
             </small>

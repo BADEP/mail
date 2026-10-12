@@ -63,7 +63,7 @@ class MailGateway(models.Model):
     def _get_webhook_url(self):
         return "{}/gateway/{}/{}/update".format(
             self.webhook_url
-            or self.env["ir.config_parameter"].sudo().get_param("web.base.url"),
+            or self.env["ir.config_parameter"].sudo().get_str("web.base.url"),
             self.gateway_type,
             self.webhook_key,
         )
@@ -98,13 +98,13 @@ class MailGateway(models.Model):
             or "webhook_secret" in vals
             or "webhook_user_id" in vals
         ):
-            self.env.registry.clear_cache()
+            self.env.transaction.invalidate_ormcache()
         return res
 
     @api.model_create_multi
     def create(self, mvals):
         res = super().create(mvals)
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return res
 
     @api.model

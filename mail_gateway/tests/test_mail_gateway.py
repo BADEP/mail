@@ -52,7 +52,7 @@ class TestMailGateway(MailGatewayTestCase):
         self.assertEqual(info[0]["name"], "Test Gateway")
 
     def test_webhook_url(self):
-        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        base_url = self.env["ir.config_parameter"].sudo().get_str("web.base.url")
         self.assertEqual(
             self.gateway.webhook_url,
             f"{base_url}/gateway/{self.GATEWAY_TYPE}/test-wh-key-001/update",
@@ -1000,7 +1000,7 @@ class TestMailGatewayController(MailGatewayTestCase):
         self.assertEqual(json.loads(mock_req.make_response.call_args[0][0]), {})
 
     def test_post_integrated_gateway(self):
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         mock_req = self._call("ctrl-wh-key", data=json.dumps({"msg": "hello"}).encode())
         self.assertEqual(json.loads(mock_req.make_response.call_args[0][0]), {})
 
@@ -1012,7 +1012,7 @@ class TestMailGatewayController(MailGatewayTestCase):
     def test_post_unverified_returns_empty(self):
         # _verify_update returns False → controller logs a WARNING and returns {}.
         impl_cls = type(self.env["mail.gateway.abstract"])
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         with patch.object(impl_cls, "_verify_update", return_value=False):
             with self.assertLogs(
                 "odoo.addons.mail_gateway.controllers.gateway", "WARNING"
@@ -1032,7 +1032,7 @@ class TestMailGatewayController(MailGatewayTestCase):
                 "integrated_webhook_state": "pending",
             }
         )
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         mock_req = self._call("pending-wh-key", method="GET")
         # _receive_get_update returns make_response({}) → called once
         mock_req.make_response.assert_called_once()

@@ -7,7 +7,7 @@
         >
             <span
                 t-elif="notification.notification_type == 'gateway'"
-                t-esc="notification.channel_name"
+                t-out="notification.channel_name"
             />
         </xpath>
     </t>

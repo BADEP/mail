@@ -1,4 +1,4 @@
-import {reactive} from "@odoo/owl";
+import { proxy } from "@odoo/owl";
 import {registry} from "@web/core/registry";
 import {user} from "@web/core/user";
 
@@ -27,7 +27,7 @@ export class GatewayCoreWeb {
 export const gatewayCoreWeb = {
   dependencies: ["bus_service", "mail.store"],
   start(env, services) {
-    const gateway_core_web = reactive(new GatewayCoreWeb(env, services));
+    const gateway_core_web = proxy(new GatewayCoreWeb(env, services));
     gateway_core_web.setup();
     return gateway_core_web;
   },
