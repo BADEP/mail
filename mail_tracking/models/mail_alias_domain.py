@@ -13,7 +13,7 @@ class MailAliasDomain(models.Model):
         """We've got `mail.alias.get_aliases` method which is cached os we need
         to refresh the cache when we add a new alias domain"""
         res = super().create(vals_list)
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return res
 
     def write(self, vals):
@@ -21,12 +21,12 @@ class MailAliasDomain(models.Model):
         to refresh the cache when we add a new alias domain"""
         res = super().write(vals)
         if "catchall_alias" in vals:
-            self.env.registry.clear_cache()
+            self.env.transaction.invalidate_ormcache()
         return res
 
     def unlink(self):
         """We've got `mail.alias.get_aliases` method which is cached os we need
         to refresh the cache when we remove an alias domain"""
         res = super().unlink()
-        self.env.registry.clear_cache()
+        self.env.transaction.invalidate_ormcache()
         return res

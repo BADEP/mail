@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates xml:space="preserve">
     <t t-name="mail_tracking.MessageTracking">
-        <t t-set="skip_track_links" t-value="props.skip_track_links" />
-        <t t-foreach="partner_trackings" t-as="tracking" t-key="tracking_index">
+        <t t-set="skip_track_links" t-value="this.props.skip_track_links" />
+        <t t-foreach="this.partner_trackings" t-as="tracking" t-key="tracking_index">
             <t t-if="!tracking_first">
                 -
             </t>
@@ -32,7 +32,7 @@
                 t-att-data-tracking="tracking['tracking_id']"
                 t-att-title="title_status"
                 type="button"
-                t-on-click="_onTrackingStatusClick"
+                t-on-click="this._onTrackingStatusClick"
             >
                 <t t-call="mail_tracking.TrackingStatus" />
             </span>

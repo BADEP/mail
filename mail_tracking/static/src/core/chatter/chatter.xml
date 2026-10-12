@@ -4,35 +4,35 @@
         <div class="o-mail-ActivityList">
             <div
                 class="d-flex pt-4 cursor-pointer fw-bolder"
-                t-on-click="toggleFailedMessageList"
+                t-on-click="this.toggleFailedMessageList"
             >
                 <hr class="flex-grow-1 fs-3" />
                 <div class="d-flex align-items-center px-3">
                     <i
                         class="fa fa-fw text-danger"
-                        t-att-class="state.showFailedMessageList ? 'fa-caret-down' : 'fa-caret-right'"
+                        t-att-class="this.state.showFailedMessageList ? 'fa-caret-down' : 'fa-caret-right'"
                     />
                     <span class="text-danger">Failed messages</span>
                     <span
-                        t-if="!state.showFailedMessageList"
+                        t-if="!this.state.showFailedMessageList"
                         class="badge rounded-pill ms-2 text-bg-danger"
                     >
-                        <t t-esc="failed_messages.length" />
+                        <t t-out="this.failed_messages.length" />
                     </span>
                 </div>
                 <hr class="flex-grow-1 fe-3" />
             </div>
-            <t t-if="state.showFailedMessageList">
+            <t t-if="this.state.showFailedMessageList">
                 <div class="o-mail-MessageCardList d-flex flex-column">
                     <t
-                        t-foreach="failed_messages"
+                        t-foreach="this.failed_messages"
                         t-as="failed_message"
                         t-key="failed_message.id"
                     >
                         <FailedMessage
                             message="failed_message"
-                            onUpdate.bind="load"
-                            reloadParentView.bind="reloadParentView"
+                            onUpdate.bind="this.load"
+                            reloadParentView.bind="this.reloadParentView"
                         />
                     </t>
                 </div>

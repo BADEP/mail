@@ -74,7 +74,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
                     ),
                 },
             )
-            for _ in http._generate_routing_rules(
+            for _ in http.routing_map._generate_routing_rules(
                 ["mail", "mail_tracking"], nodb_only=False
             ):
                 pass
@@ -193,7 +193,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         self.env.company.mail_tracking_show_aliases = True
         # Setup catchall domain
         IrConfigParamObj = self.env["ir.config_parameter"].sudo()
-        IrConfigParamObj.set_param("mail.catchall.domain", "test.com")
+        IrConfigParamObj.set_str("mail.catchall.domain", "test.com")
         # pylint: disable=C8107
         message = self.env["mail.message"].create(
             {
@@ -629,7 +629,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         mail, tracking = self.mail_send(self.recipient.email)
         self.assertEqual(mail.email_to, tracking.recipient)
         self.assertEqual(mail.email_from, tracking.sender)
-        with patch("odoo.http.db_filter") as mock_client:
+        with patch("odoo.http.router.db_filter") as mock_client:
             mock_client.return_value = True
             res = controller.mail_tracking_open(db, tracking.id, tracking.token)
             self.assertEqual(image, res.response[0])
@@ -648,7 +648,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
 
         controller = MailTrackingController()
         db = self.env.cr.dbname
-        with patch("odoo.http.db_filter") as mock_client:
+        with patch("odoo.http.router.db_filter") as mock_client:
             mock_client.return_value = True
             mail, tracking = self.mail_send(self.recipient.email)
             # Tracking is in sent or delivered state. But no token give.
@@ -686,7 +686,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             ):
                 controller.mail_tracking_open(db, tracking.id, False)
         # Purposely trigger an error during db_env (to increase coverage)
-        with patch("odoo.http.db_filter") as mock_client, self.assertRaises(BadRequest):
+        with patch("odoo.http.router.db_filter") as mock_client, self.assertRaises(BadRequest):
             mock_client.return_value = False
             controller.mail_tracking_open(db, tracking.id, False)
 
@@ -694,19 +694,19 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
     def test_db_env(self):
         dbname = self.env.cr.dbname
 
-        with patch("odoo.http.db_filter", return_value=False):
+        with patch("odoo.http.router.db_filter", return_value=False):
             with self.assertRaises(BadRequest):
                 with db_env(dbname):
                     pass
 
-        with patch("odoo.http.db_filter", return_value=True):
+        with patch("odoo.http.router.db_filter", return_value=True):
             with db_env(dbname) as env:
                 self.assertEqual(env.cr, self.env.cr)
 
         mock_connection = Mock()
         mock_connection.cursor.return_value = self.env.cr
         with (
-            patch("odoo.http.db_filter", return_value=True),
+            patch("odoo.http.router.db_filter", return_value=True),
             patch.object(http.request, "db", f"{dbname}_other"),
             patch(
                 "odoo.sql_db.db_connect", return_value=mock_connection
@@ -720,7 +720,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         mock_connection = Mock()
         mock_connection.cursor.return_value = self.env.cr
         with (
-            patch("odoo.http.db_filter", return_value=True),
+            patch("odoo.http.router.db_filter", return_value=True),
             patch.object(http.request, "env", Mock(cr=None)),
             patch(
                 "odoo.sql_db.db_connect", return_value=mock_connection
@@ -944,7 +944,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             self.assertTrue(html_part)
             return html_part.get_content()
 
-        self.env["ir.config_parameter"].set_param(
+        self.env["ir.config_parameter"].set_str(
             "mail_tracking.tracking_img_disabled", False
         )
         message = mail_server._build_email__(
@@ -957,7 +957,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         self.assertEqual(message["X-Odoo-MailTracking-ID"], str(tracking.id))
         self.assertIn("data-odoo-tracking-email", _html_body(message))
 
-        self.env["ir.config_parameter"].set_param(
+        self.env["ir.config_parameter"].set_str(
             "mail_tracking.tracking_img_disabled", True
         )
         message = mail_server._build_email__(
@@ -1058,7 +1058,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
             mail_server._tracking_img_remove(body),
         )
 
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "mail_tracking.tracking_img_disabled", True
         )
         built_message = mail_server._build_email__(
@@ -1262,7 +1262,7 @@ class TestMailTracking(TransactionCase, MockSmtplibCase):
         self.assertEqual(vals["event_type"], "sent")
         self.assertEqual(vals["tracking_email_id"], tracking.id)
 
-        self.env["ir.config_parameter"].sudo().set_param(
+        self.env["ir.config_parameter"].sudo().set_str(
             "mail_tracking.mail_tracking_email_max_age_days", "not-an-integer"
         )
         self.assertFalse(

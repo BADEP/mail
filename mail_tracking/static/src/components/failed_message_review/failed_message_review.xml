@@ -7,7 +7,7 @@
                 href="#"
                 class="btn btn-link btn-success text-muted p-0 me-3"
                 role="button"
-                t-on-click="setFailedMessageReviewed"
+                t-on-click="this.setFailedMessageReviewed"
             >
             <i class="fa fa-check" role="img" aria-label="Set As Reviewed" />
             Set as Reviewed
@@ -16,7 +16,7 @@
                 href="#"
                 class="btn btn-link btn-success text-muted p-0 me-3"
                 role="button"
-                t-on-click="retryFailedMessage"
+                t-on-click="this.retryFailedMessage"
             >
             <i class="fa fa-retweet" role="img" aria-label="Retry" />
             Retry

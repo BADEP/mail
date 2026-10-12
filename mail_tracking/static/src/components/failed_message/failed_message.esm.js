@@ -1,4 +1,4 @@
-import {Component, toRaw, useState} from "@odoo/owl";
+import { Component, toRaw, proxy } from "@odoo/owl";
 import {AvatarCardPopover} from "@mail/discuss/web/avatar_card/avatar_card_popover";
 import {FailedMessageReview} from "@mail_tracking/components/failed_message_review/failed_message_review.esm";
 import {MessageTracking} from "@mail_tracking/components/message_tracking/message_tracking.esm";
@@ -19,10 +19,10 @@ export class FailedMessage extends Component {
   };
 
   setup() {
-    this.store = useState(useService("mail.store"));
+    this.store = proxy(useService("mail.store"));
     this.avatarCard = usePopover(AvatarCardPopover);
-    this.state = useState({showDetails: false});
-    this.message = useState(this.props.message);
+    this.state = proxy({showDetails: false});
+    this.message = proxy(this.props.message);
     this.orm = useService("orm");
   }
   retryFailedMessage() {

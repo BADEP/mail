@@ -1,8 +1,9 @@
 import {Chatter} from "@mail/chatter/web_portal/chatter";
 import {FailedMessage} from "@mail_tracking/components/failed_message/failed_message.esm";
+import { proxy } from "@odoo/owl";
 import {patch} from "@web/core/utils/patch";
 
-const {useState} = owl;
+const {proxy} = owl;
 
 Chatter.components = {
   ...Chatter.components,
@@ -13,7 +14,7 @@ Chatter.components = {
 const ChatterPatch = {
   setup() {
     super.setup(...arguments);
-    this.state = useState({
+    this.state = proxy({
       ...this.state,
       showFailedMessageList: true,
     });

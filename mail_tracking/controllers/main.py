@@ -19,7 +19,7 @@ BLANK = "R0lGODlhAQABAIAAANvf7wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
 
 @contextmanager
 def db_env(dbname):
-    if not http.db_filter([dbname]):
+    if not http.router.db_filter([dbname]):
         raise werkzeug.exceptions.BadRequest()
     cr = None
     if dbname == http.request.db:

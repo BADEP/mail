@@ -31,9 +31,7 @@
         t-inherit-mode="extension"
     >
         <xpath expr="//div" position="inside">
-            <t t-call="mail.MobileMailbox">
-                <t t-set="mailbox" t-value="store.failed" />
-            </t>
+            <t t-call="mail.MobileMailbox" mailbox="store.failed"/>
         </xpath>
     </t>
 </templates>

@@ -1,13 +1,14 @@
+import { proxy } from "@odoo/owl";
 import {useService} from "@web/core/utils/hooks";
 
-const {Component, useState} = owl;
+const {Component, proxy} = owl;
 
 export class FailedMessageReview extends Component {
   static props = ["message"];
   static template = "mail_tracking.FailedMessageReview";
 
   setup() {
-    this.message = useState(this.props.message);
+    this.message = proxy(this.props.message);
     this.orm = useService("orm");
   }
   async setFailedMessageReviewed() {

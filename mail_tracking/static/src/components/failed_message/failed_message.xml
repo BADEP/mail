@@ -10,9 +10,9 @@
                     >
                         <img
                             class="o-mail-Message-avatar w-100 h-100 rounded"
-                            t-att-class="authorAvatarAttClass"
-                            t-att-src="authorAvatarUrl"
-                            t-on-click.stop.prevent="onClickAvatar"
+                            t-att-class="this.authorAvatarAttClass"
+                            t-att-src="this.authorAvatarUrl"
+                            t-on-click.stop.prevent="this.onClickAvatar"
                         />
                         <div
                             class="o-mail-Activity-iconContainer position-absolute top-100 start-100 translate-middle d-flex align-items-center justify-content-center mt-n1 ms-n1 rounded-circle w-50 h-50 bg-danger text-light"
@@ -23,43 +23,43 @@
                     <div class="flex-grow px-3">
                         <div class="o-mail-Activity-info lh-1">
                             <span
-                                t-if="message.author or message.email_from"
+                                t-if="this.message.author or this.message.email_from"
                                 class="o-mail-Message-author"
-                                t-on-click.stop.prevent="onClickAvatar"
-                                t-att-role="hasAuthorClickable() ? 'button' : ''"
+                                t-on-click.stop.prevent="this.onClickAvatar"
+                                t-att-role="this.hasAuthorClickable() ? 'button' : ''"
                             >
                                 <strong class="me-1 text-truncate">
                                     <t
-                                        t-if="message.author"
-                                        t-esc="message.author.name"
+                                        t-if="this.message.author"
+                                        t-out="this.message.author.name"
                                     />
-                                    <t t-else="" t-esc="message.email_from" />
+                                    <t t-else="" t-out="this.message.email_from" />
                                 </strong>
                             </span>
                             <small
-                                t-if="!message.is_transient"
+                                t-if="!this.message.is_transient"
                                 class="o-mail-Message-date text-muted opacity-75"
-                                t-att-class="{ 'me-2': !isAlignedRight }"
-                                t-att-title="message.datetimeShort"
+                                t-att-class="{ 'me-2': !this.isAlignedRight }"
+                                t-att-title="this.message.datetimeShort"
                             >
-                            - <RelativeTime datetime="message.datetime" />
+                            - <RelativeTime datetime="this.message.datetime" />
                         </small>
                             <i
                                 class="fa fa-info-circle btn-link btn-primary cursor-pointer ms-1"
                                 role="img"
                                 title="Info"
                                 aria-label="Info"
-                                t-on-click="toggleDetails"
+                                t-on-click="this.toggleDetails"
                             />
                         </div>
                         <div class="lh-lg">
-                            <FailedMessageReview message="message" />
+                            <FailedMessageReview message="this.message" />
                             <span>
                                 <a
                                     href="#"
                                     class="btn btn-link btn-success text-muted p-0 me-3"
                                     role="button"
-                                    t-on-click="onClickJump"
+                                    t-on-click="this.onClickJump"
                                 >
                                 <i
                                     class="fa fa-angle-double-down"
@@ -73,20 +73,20 @@
                         <div class="o-mail-Activity-info lh-1">
                             <strong class="text-danger">Failed Recipients: </strong>
                             <MessageTracking
-                                partner_trackings="failed_recipients"
-                                message="message"
+                                partner_trackings="this.failed_recipients"
+                                message="this.message"
                                 skip_track_links="true"
                             />
                         </div>
                         <div
-                            t-if="state.showDetails"
+                            t-if="this.state.showDetails"
                             class="position-relative text-break o-mail-Message-body p-1"
                         >
                             <em
-                                t-if="message.subject and !message.isSubjectSimilarToOriginThreadName and !message.isSubjectDefault"
+                                t-if="this.message.subject and !this.message.isSubjectSimilarToOriginThreadName and !this.message.isSubjectDefault"
                                 class="mb-1 me-2"
-                            >Subject: <t t-out="message.subject" /></em>
-                            <t t-if="message.body" t-out="message.body" />
+                            >Subject: <t t-out="this.message.subject" /></em>
+                            <t t-if="this.message.body" t-out="this.message.body" />
                         </div>
                     </div>
                 </div>

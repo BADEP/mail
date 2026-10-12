@@ -245,8 +245,8 @@ class MailMessage(models.Model):
         if self.env.company.mail_tracking_show_aliases:
             IrConfigParamObj = self.env["ir.config_parameter"].sudo()
             aliases = "{}@{}".format(
-                IrConfigParamObj.get_param("mail.catchall.alias"),
-                IrConfigParamObj.get_param("mail.catchall.domain"),
+                IrConfigParamObj.get_str("mail.catchall.alias"),
+                IrConfigParamObj.get_str("mail.catchall.domain"),
             )
 
         def _filter_alias(email):

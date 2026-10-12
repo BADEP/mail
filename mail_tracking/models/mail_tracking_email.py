@@ -351,7 +351,7 @@ class MailTrackingEmail(models.Model):
 
     def _get_mail_tracking_img(self):
         m_config = self.env["ir.config_parameter"]
-        base_url = m_config.get_param("mail_tracking.base.url") or m_config.get_param(
+        base_url = m_config.get_str("mail_tracking.base.url") or m_config.get_str(
             "web.base.url"
         )
         if self.token:
@@ -504,7 +504,7 @@ class MailTrackingEmail(models.Model):
         config_max_age_days = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_tracking.mail_tracking_email_max_age_days")
+            .get_str("mail_tracking.mail_tracking_email_max_age_days")
         )
         try:
             max_age_days = int(config_max_age_days)

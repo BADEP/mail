@@ -30,7 +30,7 @@ class IrMailServer(models.Model):
         value = (
             self.env["ir.config_parameter"]
             .sudo()
-            .get_param("mail_tracking.tracking_img_disabled", False)
+            .get_str("mail_tracking.tracking_img_disabled", False)
         )
         if isinstance(value, str):
             return tools.str2bool(value, bool(value))

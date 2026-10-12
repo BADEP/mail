@@ -1,11 +1,12 @@
-const {Component, useState} = owl;
+import { proxy } from "@odoo/owl";
+const {Component, proxy} = owl;
 
 export class MessageTracking extends Component {
   static template = "mail_tracking.MessageTracking";
   static props = ["message", "partner_trackings", "skip_track_links?"];
   setup() {
-    this.message = useState(this.props.message);
-    this.partner_trackings = useState(this.props.partner_trackings);
+    this.message = proxy(this.props.message);
+    this.partner_trackings = proxy(this.props.partner_trackings);
   }
   _onTrackingStatusClick(event) {
     const tracking_email_id = event.currentTarget.dataset.tracking;
